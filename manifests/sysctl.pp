@@ -165,7 +165,9 @@ class os_hardening::sysctl (
 
   # This settings controls how the kernel behaves towards module changes at runtime. Setting to 1 will disable module loading at runtime.
   if $enable_module_loading == false {
-    sysctl { 'kernel.modules_disabled': value => '1' }
+    sysctl { 'kernel.modules_disabled': 
+        value => '1',
+        silent => true }
   }
   #kernel.modules_disabled = <%= @enable_module_loading ? 0 : 1 %>
 
@@ -186,9 +188,15 @@ class os_hardening::sysctl (
   # * **256** - nicing of all RT tasks
   if $enable_sysrq {
     $limited_sysrq = 4 + 16 + 32 + 64 + 128
-    sysctl { 'kernel.sysrq': value => $limited_sysrq }
+    sysctl { 'kernel.sysrq': 
+        value => $limited_sysrq,
+        silent => true
+    }
   } else {
-    sysctl { 'kernel.sysrq': value => '0' }
+    sysctl { 'kernel.sysrq': 
+        value => '0',
+        silent => true
+    }
   }
 
   # Enable stack protection by randomizing kernel va space
